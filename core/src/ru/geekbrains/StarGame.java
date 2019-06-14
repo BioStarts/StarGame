@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class StarGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture img,space;
+	Texture img,space,rocket;
 	TextureRegion face;
 	Stage stage;
 	int imgpos = 0;
@@ -20,15 +20,16 @@ public class StarGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		space = new Texture("space.jpg");
+		rocket = new Texture("rocket.png");
 		face = new TextureRegion(img,30,50,200,140);
 		stage = new Stage();
 	}
 
 	@Override
 	public void render () {
-		imgpos+=imgposdir;
+		imgpos+=5*imgposdir;
 		if (imgpos<0) imgposdir=-imgposdir;
-		if (imgpos>440) imgposdir=-imgposdir;
+		if (imgpos>540) imgposdir=-imgposdir;
 		//Gdx.gl.glClearColor(0, 0, 0, 1);
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -41,8 +42,9 @@ public class StarGame extends ApplicationAdapter {
 		batch.begin();
 		//batch.setColor(0,0.5f,0,1);
 		//batch.draw(space, 0, 0);
-		batch.setColor(0,0.5f,0,1);
-		batch.draw(face, imgpos, 100);
+		batch.draw(rocket, imgpos, 100,100,100);
+		//batch.setColor(0,0.5f,0,1);
+		batch.draw(face, 240, 350);
 		batch.end();
 	}
 	
