@@ -19,7 +19,7 @@ public class MenuScreen extends BaseScreen {
     private Vector2 touch;
     private Vector2 pos;
     private Vector2 v;
-    private Vector2 curPos;
+    private Vector2 v2;
 
 
     @Override
@@ -33,7 +33,7 @@ public class MenuScreen extends BaseScreen {
         touch = new Vector2();
         pos = new Vector2();
         v = new Vector2();
-        curPos = new Vector2();
+        v2 = new Vector2();
     }
 
     @Override
@@ -41,10 +41,11 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
 
 
-       v = touch.cpy().sub(pos.cpy()); // получаем вектор скорости от позиции к касанию
+       v = touch.cpy().sub(pos.cpy()); // получаем вектор перемещения от позиции к касанию
        v.nor();// делаем из него вектор направления
-       if (touch.cpy().sub(pos.cpy()).len2() >= 2){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
-           pos.add(v.scl(5f));// добавляем к позиции величину вектора направления и задаем скорость скалируя вектор
+       v2 = v.cpy().scl(5f); //задаем скорость скалируя вектор
+       if (touch.cpy().sub(pos.cpy()).len2() >= 1){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
+           pos.add(v2);// добавляем к позиции величину вектора скорости
        }
 
 
