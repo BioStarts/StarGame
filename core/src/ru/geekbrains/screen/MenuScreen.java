@@ -32,7 +32,7 @@ public class MenuScreen extends BaseScreen {
         stage = new Stage();
         touch = new Vector2();
         pos = new Vector2();
-        v = new Vector2(2,4);
+        v = new Vector2();
         curPos = new Vector2();
     }
 
@@ -41,27 +41,12 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
 
 
-        //System.out.println("getregion X = " + );
+       v = touch.cpy().sub(pos.cpy()); // получаем вектор скорости от позиции к касанию
+       v.nor();// делаем из него вектор направления
+       if (touch.cpy().sub(pos.cpy()).len2() >= 2){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
+           pos.add(v.scl(5f));// добавляем к позиции величину вектора направления и задаем скорость скалируя вектор
+       }
 
-        if (touchX != curPos.x){
-            if (curPos.x < touchX){
-                v.x = (touchX)/5;
-            } else {
-                v.x = -(touchX)/5;
-            }
-            if (curPos.y < touchY){
-                v.y = (touchY)/5;
-            } else {
-                v.y = -(touchY)/5;
-            }
-            while ((curPos.x != touchX) & (curPos.y != touchY)){
-                pos.add(v);
-                curPos.x += v.x;
-                curPos.y += v.y;
-            }
-            /*v.x = 0;
-            v.y = 0;*/
-        }
 
         imgpos+=5*imgposdir;
         if (imgpos<0) imgposdir=-imgposdir;
@@ -100,4 +85,5 @@ public class MenuScreen extends BaseScreen {
         System.out.println("touchDown screenX = " + touch.x + " screenY = " + touch.y);
         return false;
     }
+
 }
