@@ -4,14 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-
-import ru.geekbrains.screen.MenuScreen;
 
 public abstract class BaseScreen implements Screen,InputProcessor {
 
     protected SpriteBatch batch;
-    public float touchX,touchY;
 
     @Override
     public void show() {
@@ -79,8 +75,6 @@ public abstract class BaseScreen implements Screen,InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         System.out.println("touchUp screenX = " + screenX + " screenY = " + screenY);
-        touchX = screenX;
-        touchY = screenY;
         return false;
     }
 
