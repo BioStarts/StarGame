@@ -4,16 +4,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
+
+import ru.geekbrains.math.MatrixUtils;
+import ru.geekbrains.math.Rect;
 
 public abstract class BaseScreen implements Screen,InputProcessor {
 
     protected SpriteBatch batch;
+    private Rect screenBounds;
+    private Rect worldBounds;
+    private Rect glBounds;
+
+    private Matrix4 worldToGl;//матрица перевода из игровой в GL системы координат
 
     @Override
     public void show() {
         this.batch = new SpriteBatch();
         System.out.println("show");
         Gdx.input.setInputProcessor(this);
+        screenBounds = new Rect();
+        worldBounds = new Rect();
+        glBounds = new Rect(0,0,1f,1f);
+        worldToGl = new Matrix4();
     }
 
     @Override
@@ -24,6 +37,24 @@ public abstract class BaseScreen implements Screen,InputProcessor {
     @Override
     public void resize(int width, int height) {
         System.out.println("resize width = " + width + " height = " + height);
+        screenBounds.setSize(width,height);
+        screenBounds.setLeft(0);//
+        screenBounds.setBottom(0);//сместили в 0,0
+
+        float aspect = width/(float) height; // нашли отношение ширины и высоты
+
+        worldBounds.setHeight(1f);
+        worldBounds.setWidth(1f*aspect); // учли соотношение сторон
+
+        MatrixUtils.calcTransitionMatrix(worldToGl,worldBounds,glBounds); // посчитали матрицу
+
+        batch.setProjectionMatrix(worldToGl);
+
+        resize(worldBounds);
+    }
+
+    public void resize(Rect worldBounds) {
+        System.out.println("worldBounds worldBounds.x = " + worldBounds.getWidth()+ " worldBounds.y = " + worldBounds.getHeight());
     }
 
     @Override
