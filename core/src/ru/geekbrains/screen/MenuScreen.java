@@ -17,10 +17,11 @@ public class MenuScreen extends BaseScreen {
     private TextureRegion face;
     private Background background;
 
-
+    private Vector2 touch;
     private Vector2 pos;
     private Vector2 v;
     private Vector2 v2;
+    private boolean touchDown;
 
 
     @Override
@@ -31,18 +32,18 @@ public class MenuScreen extends BaseScreen {
         face = new TextureRegion(img,30,50,200,140);
         pos = new Vector2();
         background = new Background(new TextureRegion(space));
-        //batch.getProjectionMatrix().idt();//привели матрице к единичному виду
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
         background.draw(batch);
-        batch.draw(face, 0, 0f,0.5f,0.5f);
+        batch.draw(face, moveTouch().x, moveTouch().y,0.2f,0.2f);
         batch.end();
     }
 
@@ -58,5 +59,6 @@ public class MenuScreen extends BaseScreen {
         space.dispose();
         super.dispose();
     }
+
 
 }
