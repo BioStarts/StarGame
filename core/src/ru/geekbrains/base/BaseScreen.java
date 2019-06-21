@@ -75,11 +75,12 @@ public abstract class BaseScreen implements Screen,InputProcessor {
     public Vector2 moveTouch(){
         v = touch2.cpy().sub(pos.cpy()); // получаем вектор перемещения от позиции к касанию
         v.nor();// делаем из него вектор направления
-        v2 = v.cpy().scl(0.07f); //задаем скорость скалируя вектор
-        if (touch2.cpy().sub(pos.cpy()).len2() >= v2.len2()){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
+        v2 = v.cpy().scl(0.01f); //задаем скорость скалируя вектор
+        System.out.println("v2 len = " + v2.len());
+        if (touch2.cpy().sub(pos.cpy()).len() >= v2.len2()){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
             return (pos.add(v2));// добавляем к позиции величину вектора скорости
         }
-        return (pos.add(touch2.x,touch2.y));
+        return (pos);
     }
 
     public void resize(Rect worldBounds) {
