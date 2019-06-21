@@ -26,7 +26,7 @@ public abstract class BaseScreen implements Screen,InputProcessor {
     private Vector2 pos;
     private Vector2 v;
     private Vector2 v2;
-    private Vector2 touch2;
+    private Vector2 currentTouchInOpenGL;
 
     @Override
     public void show() {
@@ -40,7 +40,7 @@ public abstract class BaseScreen implements Screen,InputProcessor {
         screenToWorld = new Matrix3();
         touch = new Vector2();
 
-        touch2 = new Vector2();
+        currentTouchInOpenGL = new Vector2();
         pos = new Vector2();
         v = new Vector2();
         v2 = new Vector2();
@@ -73,11 +73,11 @@ public abstract class BaseScreen implements Screen,InputProcessor {
     }
 
     public Vector2 moveTouch(){
-        v = touch2.cpy().sub(pos.cpy()); // получаем вектор перемещения от позиции к касанию
+        v = currentTouchInOpenGL.cpy().sub(pos.cpy()); // получаем вектор перемещения от позиции к касанию
         v.nor();// делаем из него вектор направления
         v2 = v.cpy().scl(0.01f); //задаем скорость скалируя вектор
         System.out.println("v2 len = " + v2.len());
-        if (touch2.cpy().sub(pos.cpy()).len() >= v2.len2()){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
+        if (currentTouchInOpenGL.cpy().sub(pos.cpy()).len() >= v2.len2()){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
             return (pos.add(v2));// добавляем к позиции величину вектора скорости
         }
         return (pos);
@@ -137,6 +137,7 @@ public abstract class BaseScreen implements Screen,InputProcessor {
         System.out.println("touchDown screenX = " + screenX + " screenY = " + screenY);
         touch.set(screenX,Gdx.graphics.getHeight() - screenY).mul(screenToWorld);
         touchDown(touch, pointer);
+        currentTouchInOpenGL = touch;
         return false;
     }
 
@@ -163,7 +164,6 @@ public abstract class BaseScreen implements Screen,InputProcessor {
         System.out.println("touchDragged screenX = " + screenX + " screenY = " + screenY);
         touch.set(screenX,Gdx.graphics.getHeight() - screenY).mul(screenToWorld);
         touchDragged(touch,pointer);
-        touch2 = touch;
         return false;
     }
 
