@@ -1,7 +1,9 @@
 package ru.geekbrains.base;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.math.Rect;
 
@@ -37,6 +39,20 @@ public class Sprite extends Rect {
     public void resize(Rect worldBounds) {
 
     }
+
+    public boolean touchDown(Vector2 touch, int pointer) {
+        return false;
+    }
+
+
+    public boolean touchUp(Vector2 touch, int pointer) {
+        return false;
+    }
+
+    public void update(float delta){
+
+    }
+
 
     public float getAngle() {
         return angle;
