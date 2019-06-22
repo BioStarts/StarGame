@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
+import ru.geekbrains.math.Rect;
 
 public class Logo extends Sprite {
 
@@ -11,6 +12,7 @@ public class Logo extends Sprite {
     private Vector2 v;
     private Vector2 buf;
     private Vector2 touch;
+    private Rect worldBounds;
 
     public Logo(TextureRegion region) {
         super(region);
@@ -18,6 +20,11 @@ public class Logo extends Sprite {
         v = new Vector2();
         buf = new Vector2();
         touch = new Vector2();
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
     }
 
     @Override
@@ -30,6 +37,13 @@ public class Logo extends Sprite {
 
     @Override
     public void update(float delta) {
+
+        if (worldBounds.getBottom() > getBottom()){//проверка чтобы ограничить перемещение по нижней части экрана
+            v.setZero();
+            setBottom(worldBounds.getBottom());
+            return;
+        }
+
         buf.set(touch);
         if (buf.sub(pos).len() >= V_LEN){
             pos.add(v);
