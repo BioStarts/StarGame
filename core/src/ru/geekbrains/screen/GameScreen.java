@@ -22,7 +22,7 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas mainAtlas;
 
     //private Star star;
-    private final static int COUNT_STARS = 80;
+    private final static int COUNT_STARS = 100;
 
     private Spaceship spaceship;
 
