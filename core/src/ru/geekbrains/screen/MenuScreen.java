@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 
 
 import ru.geekbrains.base.BaseScreen;
@@ -25,6 +26,8 @@ public class MenuScreen extends BaseScreen {
 
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
+
+
 
     public MenuScreen (Game game){
         this.game = game;

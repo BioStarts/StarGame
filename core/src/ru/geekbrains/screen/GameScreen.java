@@ -2,9 +2,12 @@ package ru.geekbrains.screen;
 
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
@@ -17,8 +20,8 @@ public class GameScreen extends BaseScreen {
     private Texture space;
     private TextureAtlas atlas;
 
-
     private Star star;
+
 
     @Override
     public void show() {
@@ -28,6 +31,8 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         star = new Star(atlas);
     }
+
+
 
     @Override
     public void render(float delta) {
@@ -43,7 +48,9 @@ public class GameScreen extends BaseScreen {
     public void draw(){
         batch.begin();
         background.draw(batch);
-        star.draw(batch);
+        //for(Star star : star.getStars()) {
+            star.draw(batch);
+        //}
         batch.end();
     }
 

@@ -1,8 +1,12 @@
 package ru.geekbrains.sprite;
 
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
@@ -12,6 +16,15 @@ public class Star extends Sprite {
 
     private Vector2 v = new Vector2();
     private Rect worldBounds;
+
+
+    /*public Array<Star> getStars() {
+        return stars;
+    }*/
+
+    //private Array<Star> stars = new Array<>();
+    //private SpriteBatch batchStars = new SpriteBatch();
+    //private TextureAtlas atlas = new TextureAtlas("textures/menuAtlas.tpack");;
 
     @Override
     public void resize(Rect worldBounds) {
@@ -23,17 +36,35 @@ public class Star extends Sprite {
 
     public Star(TextureAtlas atlas) {
         super(atlas.findRegion("star"));
-        v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.5f, -0.01f));
+        v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.5f, -0.01f));//задаем вектора x,y для звезды
         setHeightProportion(0.1f);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
-        pos.mulAdd(v,delta);
+        pos.mulAdd(v, delta);
         if (getRight() < worldBounds.getLeft()) setLeft(worldBounds.getRight());
         if (getLeft() > worldBounds.getRight()) setRight(worldBounds.getLeft());
         if (getTop() < worldBounds.getBottom()) setBottom(worldBounds.getTop());
         if (getBottom() > worldBounds.getTop()) setTop(worldBounds.getBottom());
     }
+
+    /*private void MakeStars() {
+        int starsToAdd = 10 - stars.size;
+        //Star s = createStar();
+        for (int i = 0; i < starsToAdd ; i++) {
+            stars.add(createStar());
+        }
+    }
+
+    public Star createStar() {
+        Star star = new Star(atlas);
+        return star;
+    }
+
+    @Override
+    public void draw(SpriteBatch batch) {
+        batch.draw(atlas.findRegion("star"),v.x,v.y);
+    }*/
 }
