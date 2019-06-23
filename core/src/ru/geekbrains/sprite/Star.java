@@ -3,6 +3,7 @@ package ru.geekbrains.sprite;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -15,29 +16,33 @@ import ru.geekbrains.math.Rnd;
 public class Star extends Sprite {
 
     private Vector2 v = new Vector2();
+
+    public Rect getWorldBounds() {//
+        return worldBounds;
+    }
+
     private Rect worldBounds;
 
 
-    /*public Array<Star> getStars() {
-        return stars;
-    }*/
+    float posX;
+    float posY;
 
-    //private Array<Star> stars = new Array<>();
-    //private SpriteBatch batchStars = new SpriteBatch();
-    //private TextureAtlas atlas = new TextureAtlas("textures/menuAtlas.tpack");;
+
 
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
-        float posX = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
-        float posY = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
+        //float posX = Rnd.nextFloat(worldBounds.getLeft(), worldBounds.getRight());
+        //float posY = Rnd.nextFloat(worldBounds.getBottom(), worldBounds.getTop());
         pos.set(posX,posY);
     }
 
-    public Star(TextureAtlas atlas) {
+    public Star(TextureAtlas atlas,float posX, float posY) {
         super(atlas.findRegion("star"));
+        this.posX = posX;//
+        this.posY = posY;//
         v.set(Rnd.nextFloat(-0.005f, 0.005f), Rnd.nextFloat(-0.5f, -0.01f));//задаем вектора x,y для звезды
-        setHeightProportion(0.1f);
+        setHeightProportion(0.01f);
     }
 
     @Override

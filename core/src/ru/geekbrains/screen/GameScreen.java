@@ -2,16 +2,16 @@ package ru.geekbrains.screen;
 
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
+
 
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.math.Rnd;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Spaceship;
 import ru.geekbrains.sprite.Star;
 
 public class GameScreen extends BaseScreen {
@@ -19,8 +19,15 @@ public class GameScreen extends BaseScreen {
     private Background background;
     private Texture space;
     private TextureAtlas atlas;
+    private TextureAtlas mainAtlas;
 
-    private Star star;
+    //private Star star;
+    private final static int COUNT_STARS = 80;
+
+    private Spaceship spaceship;
+
+    private Star[] stars;//
+
 
 
     @Override
@@ -29,7 +36,17 @@ public class GameScreen extends BaseScreen {
         space = new Texture("textures/space.jpg");
         background = new Background(new TextureRegion(space));
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
-        star = new Star(atlas);
+        mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
+        spaceship = new Spaceship(mainAtlas);
+
+        stars = new Star[COUNT_STARS];//
+
+        for (int i = 0; i < stars.length ; i++) {
+            float posX = Rnd.nextFloat(-0.5f, 0.5f);
+            float posY = Rnd.nextFloat(-0.5f, 0.5f);
+            stars[i] = new Star(atlas,posX,posY);
+        }
+
     }
 
 
@@ -42,15 +59,19 @@ public class GameScreen extends BaseScreen {
     }
 
     public void update(float delta){
-        star.update(delta);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].update(delta);
+        }
+        spaceship.update(delta);
     }
 
     public void draw(){
         batch.begin();
         background.draw(batch);
-        //for(Star star : star.getStars()) {
-            star.draw(batch);
-        //}
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].draw(batch);
+        }
+        spaceship.draw(batch);
         batch.end();
     }
 
@@ -58,7 +79,10 @@ public class GameScreen extends BaseScreen {
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
         background.resize(worldBounds);
-        star.resize(worldBounds);
+        for (int i = 0; i < stars.length; i++) {
+            stars[i].resize(worldBounds);
+        }
+        spaceship.resize(worldBounds);
     }
 
     @Override
@@ -79,7 +103,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        return super.touchDown(touch, pointer);
+        spaceship.touchDown(touch, pointer);
+        return false;
     }
 
     @Override
