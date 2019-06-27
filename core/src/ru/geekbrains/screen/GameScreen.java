@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
-import ru.geekbrains.math.Rnd;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Spaceship;
 import ru.geekbrains.sprite.Star;
@@ -21,7 +19,6 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas atlas;
     private TextureAtlas mainAtlas;
 
-    //private Star star;
     private final static int COUNT_STARS = 100;
 
     private Spaceship spaceship;
@@ -42,9 +39,7 @@ public class GameScreen extends BaseScreen {
         stars = new Star[COUNT_STARS];//
 
         for (int i = 0; i < stars.length ; i++) {
-            float posX = Rnd.nextFloat(-0.5f, 0.5f);
-            float posY = Rnd.nextFloat(-0.5f, 0.5f);
-            stars[i] = new Star(atlas,posX,posY);
+            stars[i] = new Star(atlas);
         }
 
     }
@@ -88,17 +83,20 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         space.dispose();
+        atlas.dispose();
         super.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        return super.keyDown(keycode);
+        spaceship.keyDown(keycode);
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return super.keyUp(keycode);
+        spaceship.keyUp(keycode);
+        return false;
     }
 
     @Override
@@ -109,6 +107,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        return super.touchUp(touch, pointer);
+        spaceship.touchUp(touch, pointer);
+        return false;
     }
 }

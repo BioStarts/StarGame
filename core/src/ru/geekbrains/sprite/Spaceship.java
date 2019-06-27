@@ -1,39 +1,116 @@
 package ru.geekbrains.sprite;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 
 public class Spaceship extends Sprite {
 
-    private static final float V_LEN = 0.01f;
-    private Vector2 v;
-    private Vector2 buf;
-    private Vector2 touch;
+    private static final  int INVALID_POINTER = -1;
+
+    private final Vector2 v0 = new Vector2(0.5f,0f);
+    private Vector2 v1 = new Vector2();
+
+    private boolean pressedLeft;
+    private boolean pressedRight;
+
+    public int leftPointer = INVALID_POINTER;
+    public int rightPointer = INVALID_POINTER;
+
     private Rect worldBounds;
 
     public Spaceship(TextureAtlas atlas) {
-        super(atlas.findRegion("main_ship"));
+        super(atlas.findRegion("main_ship"),1,2,2);
         setHeightProportion(0.2f);
-        v = new Vector2();
-        buf = new Vector2();
-        touch = new Vector2();
     }
 
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
+        setBottom(worldBounds.getBottom() + 0.05f);
+    }
+
+
+    public boolean keyDown(int keycode) {
+        switch (keycode){
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                pressedLeft = true;
+                moveLeft();
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                pressedRight = true;
+                moveRight();
+                break;
+            case Input.Keys.UP:
+                frame = 1;
+                break;
+        }
+        return false;
+    }
+
+    public boolean keyUp(int keycode) {
+        switch (keycode){
+            case Input.Keys.A:
+            case Input.Keys.LEFT:
+                pressedLeft = false;
+                if (pressedRight){
+                    moveRight();
+                } else {stop();}
+                break;
+            case Input.Keys.D:
+            case Input.Keys.RIGHT:
+                pressedRight = false;
+                if (pressedLeft){
+                    moveLeft();
+                } else {stop();}
+                break;
+            case Input.Keys.UP:
+                frame = 0;
+                break;
+        }
+        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        this.touch = touch;
-        v = touch.cpy().sub(pos);//нашли вектор для перемещения от исходной точки до клика по экрану
-        v.setLength(V_LEN);// уменьшили его
+        if (touch.x < worldBounds.pos.x){
+            if (leftPointer != INVALID_POINTER){
+                return false;
+            }
+            leftPointer = pointer;
+            moveLeft();
+        } else {
+            if (rightPointer != INVALID_POINTER){
+                return false;
+            }
+            rightPointer = pointer;
+            moveRight();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        if (pointer == leftPointer){
+            leftPointer = INVALID_POINTER;
+            if (rightPointer != INVALID_POINTER){
+                moveRight();
+            } else {
+                stop();
+            }
+        } else if (pointer == rightPointer){
+            rightPointer = INVALID_POINTER;
+            if (leftPointer != INVALID_POINTER){
+                moveRight();
+            } else {
+                stop();
+            }
+        }
         return false;
     }
 
@@ -41,38 +118,29 @@ public class Spaceship extends Sprite {
 
     @Override
     public void update(float delta) {
-
         checkWindowBorders(delta);
-
-        buf.set(touch);
-        if (buf.sub(pos).len() >= V_LEN){
-            pos.add(v);
-        } else {
-            pos.set(touch);
-        }
-        pos.mulAdd(v, delta);
+        pos.mulAdd(v1,delta);
     }
 
     public void checkWindowBorders (float delta){
-        if (worldBounds.getBottom() > getBottom()){//проверка чтобы ограничить перемещение по нижней части экрана
-            v.setZero();
-            setBottom(worldBounds.getBottom());
-            return;
-        }
-        if (worldBounds.getTop() < getTop()){//проверка чтобы ограничить перемещение по верхней части экрана
-            v.setZero();
-            setTop(worldBounds.getTop());
-            return;
-        }
         if (worldBounds.getRight() < getRight()){//проверка чтобы ограничить перемещение по правой части экрана
-            v.setZero();
-            setRight(worldBounds.getRight()-0.0001f);
-            return;
+            setRight(worldBounds.getRight());
+            stop();
         }
         if (worldBounds.getLeft() > getLeft()){//проверка чтобы ограничить перемещение по левой части экрана
-            v.setZero();
-            setLeft(worldBounds.getLeft()+0.0001f);
-            return;
+            setLeft(worldBounds.getLeft());
+            stop();
         }
     }
+
+    private void moveRight(){
+        v1.set(v0);
+    }
+    private void moveLeft(){
+        v1.set(v0).rotate(180);
+    }
+    private void stop(){
+        v1.setZero();
+    }
+
 }

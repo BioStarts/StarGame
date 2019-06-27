@@ -1,19 +1,17 @@
 package ru.geekbrains.screen;
 
 import com.badlogic.gdx.Game;
-
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-
 
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.ButtonExit;
 import ru.geekbrains.sprite.ButtonPlay;
+import ru.geekbrains.sprite.Star;
 
 
 public class MenuScreen extends BaseScreen {
@@ -26,6 +24,9 @@ public class MenuScreen extends BaseScreen {
 
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
+
+    private final static int COUNT_STARS = 256;
+    private Star[] stars;
 
 
 
@@ -41,6 +42,11 @@ public class MenuScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game);
+
+        stars = new Star[COUNT_STARS];
+        for (int i = 0; i < stars.length ; i++) {
+            stars[i] = new Star(atlas);
+        }
     }
 
     @Override
@@ -51,11 +57,19 @@ public class MenuScreen extends BaseScreen {
     }
 
     public void update(float delta){
+        for (Star star: stars
+        ) {
+            star.update(delta);
+        }
     }
 
     public void draw(){
         batch.begin();
         background.draw(batch);
+        for (Star star: stars
+        ) {
+            star.draw(batch);
+        }
         buttonExit.draw(batch);
         buttonPlay.draw(batch);
         batch.end();
@@ -67,6 +81,10 @@ public class MenuScreen extends BaseScreen {
         background.resize(worldBounds);
         buttonExit.resize(worldBounds);
         buttonPlay.resize(worldBounds);
+        for (Star star: stars
+             ) {
+            star.resize(worldBounds);
+        }
     }
 
     @Override

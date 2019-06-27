@@ -24,11 +24,6 @@ public abstract class BaseScreen implements Screen,InputProcessor {
 
     private Vector2 touch;
 
-    /*private Vector2 pos;
-    private Vector2 v;
-    private Vector2 v2;
-    private Vector2 currentTouchInOpenGL;*/
-
     @Override
     public void show() {
         this.batch = new SpriteBatch();
@@ -41,10 +36,6 @@ public abstract class BaseScreen implements Screen,InputProcessor {
         screenToWorld = new Matrix3();
         touch = new Vector2();
 
-        /*currentTouchInOpenGL = new Vector2();
-        pos = new Vector2();
-        v = new Vector2();
-        v2 = new Vector2();*/
     }
 
     @Override
@@ -73,17 +64,6 @@ public abstract class BaseScreen implements Screen,InputProcessor {
 
         resize(worldBounds);
     }
-
-    /*public Vector2 moveTouch(){
-        v = currentTouchInOpenGL.cpy().sub(pos.cpy()); // получаем вектор перемещения от позиции к касанию
-        v.nor();// делаем из него вектор направления
-        v2 = v.cpy().scl(0.01f); //задаем скорость скалируя вектор
-        System.out.println("v2 len = " + v2.len());
-        if (currentTouchInOpenGL.cpy().sub(pos.cpy()).len() >= v2.len2()){ // т.к. идеальной точности не достичь сравниваем расстояние между точками
-            return (pos.add(v2));// добавляем к позиции величину вектора скорости
-        }
-        return (pos);
-    }*/
 
     public void resize(Rect worldBounds) {
         System.out.println("worldBounds worldBounds.x = " + worldBounds.getWidth()+ " worldBounds.y = " + worldBounds.getHeight());
