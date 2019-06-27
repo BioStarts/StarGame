@@ -1,6 +1,8 @@
 package ru.geekbrains.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
@@ -24,6 +26,11 @@ public class Spaceship extends Sprite {
     private Rect worldBounds;
     private BulletPool bulletPool;
     private TextureAtlas atlas;
+
+    Sound soundBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));//
+    Sound soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));//
+    Sound soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));//
+
 
     public Spaceship(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"),1,2,2);
@@ -54,6 +61,7 @@ public class Spaceship extends Sprite {
             case Input.Keys.UP:
                 //frame = 1;
                 shoot();
+                soundLaser.play();
                 break;
         }
         return false;

@@ -1,6 +1,8 @@
 package ru.geekbrains.screen;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,7 +27,7 @@ public class GameScreen extends BaseScreen {
     private BulletPool bulletPool;
     private Spaceship spaceship;
 
-    private Star[] stars;//
+    private Star[] stars;
 
 
     @Override
