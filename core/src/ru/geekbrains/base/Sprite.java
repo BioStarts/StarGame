@@ -14,6 +14,7 @@ public class Sprite extends Rect {
     protected float scale = 1f;
     protected TextureRegion[] regions;
     protected int frame;
+    protected boolean destroyed;
 
     public Sprite(TextureRegion region){
         regions = new TextureRegion[1];
@@ -23,6 +24,8 @@ public class Sprite extends Rect {
     public Sprite(TextureRegion region, int rows, int cols, int frames){
         this.regions = Regions.split(region,rows,cols,frames);
     }
+
+    public Sprite(){}
 
     public void draw(SpriteBatch batch){
         batch.draw(
@@ -82,5 +85,19 @@ public class Sprite extends Rect {
     public void setFrame(int frame) {
         this.frame = frame;
     }
+
+    public void destroy(){
+        destroyed = true;
+    }
+
+    public void flushDestroy() {
+        destroyed = false;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+
 
 }
