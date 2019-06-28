@@ -1,11 +1,14 @@
 package ru.geekbrains.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
+import ru.geekbrains.pool.BulletPool;
 
 public class Spaceship extends Sprite {
 
@@ -21,9 +24,18 @@ public class Spaceship extends Sprite {
     public int rightPointer = INVALID_POINTER;
 
     private Rect worldBounds;
+    private BulletPool bulletPool;
+    private TextureAtlas atlas;
 
-    public Spaceship(TextureAtlas atlas) {
+    Sound soundBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));//
+    Sound soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));//
+    Sound soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));//
+
+
+    public Spaceship(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"),1,2,2);
+        this.bulletPool = bulletPool;
+        this.atlas = atlas;
         setHeightProportion(0.2f);
     }
 
@@ -47,7 +59,9 @@ public class Spaceship extends Sprite {
                 moveRight();
                 break;
             case Input.Keys.UP:
-                frame = 1;
+                //frame = 1;
+                shoot();
+                soundLaser.play();
                 break;
         }
         return false;
@@ -70,7 +84,7 @@ public class Spaceship extends Sprite {
                 } else {stop();}
                 break;
             case Input.Keys.UP:
-                frame = 0;
+                //frame = 0;
                 break;
         }
         return false;
@@ -141,6 +155,11 @@ public class Spaceship extends Sprite {
     }
     private void stop(){
         v1.setZero();
+    }
+
+    public void shoot(){
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this, atlas.findRegion("bulletMainShip"), pos, new Vector2(0,0.5f),0.01f, worldBounds, 1);
     }
 
 }
