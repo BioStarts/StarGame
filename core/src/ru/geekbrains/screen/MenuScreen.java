@@ -30,7 +30,7 @@ public class MenuScreen extends BaseScreen {
     private final static int COUNT_STARS = 256;
     private Star[] stars;
 
-    Music music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+
 
     public MenuScreen (Game game){
         this.game = game;
@@ -68,8 +68,6 @@ public class MenuScreen extends BaseScreen {
     public void draw(){
         batch.begin();
         background.draw(batch);
-        music.play();
-        music.setLooping(true);
         for (Star star: stars
         ) {
             star.draw(batch);

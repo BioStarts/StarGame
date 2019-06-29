@@ -1,21 +1,16 @@
 package ru.geekbrains.sprite;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 
-public class Spaceship extends Sprite {
+public class Spaceship extends Ship {
 
     private static final  int INVALID_POINTER = -1;
-
-    private final Vector2 v0 = new Vector2(0.5f,0f);
-    private Vector2 v1 = new Vector2();
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -23,26 +18,19 @@ public class Spaceship extends Sprite {
     public int leftPointer = INVALID_POINTER;
     public int rightPointer = INVALID_POINTER;
 
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureAtlas atlas;
-
-    Sound soundBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));//
-    Sound soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));//
-    Sound soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));//
-
-
-    public Spaceship(TextureAtlas atlas, BulletPool bulletPool) {
+    public Spaceship(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"),1,2,2);
         this.bulletPool = bulletPool;
-        this.atlas = atlas;
+        this.v = new Vector2();
+        this.v0 =  new Vector2(0.5f,0f);
+        this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.bulletV = new Vector2(0,0.5f);
+        this.bulletHeight = 0.01f;
+        this.damage = 1;
+        this.shootSound = shootSound;
+        this.reloadInterval = 0.25f;
+        this.hp = 100;
         setHeightProportion(0.2f);
-    }
-
-    @Override
-    public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
-        setBottom(worldBounds.getBottom() + 0.05f);
     }
 
 
@@ -59,9 +47,8 @@ public class Spaceship extends Sprite {
                 moveRight();
                 break;
             case Input.Keys.UP:
-                //frame = 1;
+                frame = 1;
                 shoot();
-                soundLaser.play();
                 break;
         }
         return false;
@@ -84,7 +71,7 @@ public class Spaceship extends Sprite {
                 } else {stop();}
                 break;
             case Input.Keys.UP:
-                //frame = 0;
+                frame = 0;
                 break;
         }
         return false;
@@ -131,9 +118,15 @@ public class Spaceship extends Sprite {
 
 
     @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        setBottom(worldBounds.getBottom() + 0.05f);
+    }
+
+    @Override
     public void update(float delta) {
         checkWindowBorders(delta);
-        pos.mulAdd(v1,delta);
+        super.update(delta);
     }
 
     public void checkWindowBorders (float delta){
@@ -148,18 +141,15 @@ public class Spaceship extends Sprite {
     }
 
     private void moveRight(){
-        v1.set(v0);
+        v.set(v0);
     }
     private void moveLeft(){
-        v1.set(v0).rotate(180);
+        v.set(v0).rotate(180);
     }
     private void stop(){
-        v1.setZero();
+        v.setZero();
     }
 
-    public void shoot(){
-        Bullet bullet = bulletPool.obtain();
-        bullet.set(this, atlas.findRegion("bulletMainShip"), pos, new Vector2(0,0.5f),0.01f, worldBounds, 1);
-    }
+
 
 }

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.geekbrains.math.Rect;
+
 public abstract class SpritesPool<T extends Sprite> {
 
     protected final List<T> activeObjects = new ArrayList<T>();
@@ -34,6 +36,16 @@ public abstract class SpritesPool<T extends Sprite> {
             }
         }
     }
+
+    /*public void resize(Rect worldBounds){
+        for (int i = 0; i < activeObjects.size(); i++) {
+            Sprite sprite = activeObjects.get(i);
+            if (!sprite.isDestroyed()){
+                sprite.resize(worldBounds);
+            }
+        }
+    }*/
+
     public void drawActiveSprites(SpriteBatch batch){
         for (int i = 0; i < activeObjects.size(); i++) {
             Sprite sprite = activeObjects.get(i);
