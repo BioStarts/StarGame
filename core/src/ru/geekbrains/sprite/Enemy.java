@@ -21,6 +21,11 @@ public class Enemy extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) >= worldBounds.getTop())){ // увеличиваем скорость большого корабля для адекватного появления на поле
+            this.v.set(0, -0.03f);
+        } else if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) < worldBounds.getTop())) {
+            this.v.set(0, -0.005f);
+        }
         if (getBottom() < worldBounds.getBottom()) {
             destroy();
         }

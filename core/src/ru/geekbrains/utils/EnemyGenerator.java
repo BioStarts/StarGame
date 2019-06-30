@@ -108,7 +108,14 @@ public class EnemyGenerator {
                 );
             }
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
+            //enemy.setBottom(worldBounds.getTop() - 2*enemy.getHalfHeight()); // быстрый способ
             enemy.setBottom(worldBounds.getTop());
+            /*if ((enemy.getHeight() == 0.2f) & ((enemy.pos.y + enemy.getHalfHeight()) >= worldBounds.getTop())){
+                System.out.println("БОЛЬШОЙ корабль на горизонте");
+                System.out.println("enemy.pos.y = " + enemy.pos.y + " worldBounds.getTop() = " + worldBounds.getTop() + " enemy.getHalfHeight() = " + enemy.getHalfHeight());
+                this.enemyBigV.set(0, -0.9f);
+            }
+            this.enemyBigV.set(0, -0.005f);*/
         }
     }
 
