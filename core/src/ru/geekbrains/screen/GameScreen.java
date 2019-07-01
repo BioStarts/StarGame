@@ -39,6 +39,7 @@ public class GameScreen extends BaseScreen {
     private Music music;
     private Sound soundLaser;//
     private Sound soundBullet;//
+    private Sound soundExplosion;//
 
     //Sound soundBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));//
     //Sound soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));//
@@ -50,6 +51,7 @@ public class GameScreen extends BaseScreen {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
         soundLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         soundBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+        soundExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
 
         music.setLooping(true);
         music.play();
@@ -79,6 +81,13 @@ public class GameScreen extends BaseScreen {
         super.render(delta);
         update(delta);//в методе происходит все изменения/логика объектов для последующей отрисовки
         freeAllDestroyedSprites();
+
+        for (int i = 0; i < enemyPool.getActiveObjects().size(); i++) {
+            if (!enemyPool.getActiveObjects().get(i).isOutside(spaceship)){
+                enemyPool.getActiveObjects().get(i).destroy();
+                soundExplosion.play();
+            }
+        }
         draw();// отрисовка
     }
 
