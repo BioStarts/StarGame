@@ -7,10 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import ru.geekbrains.base.Sprite;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
+import ru.geekbrains.pool.ExplosionPool;
 
 public abstract class Ship extends Sprite {
 
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected Rect worldBounds;
     protected Sound shootSound;
 
@@ -40,6 +42,11 @@ public abstract class Ship extends Sprite {
         shootSound.play();
     }
 
+    protected void boom() {
+        Exploision exploision = explosionPool.obtain();
+        exploision.set(getHeight(), pos);
+    }
+
     @Override
     public void resize(Rect worldBounds) {
         this.worldBounds = worldBounds;
@@ -53,5 +60,11 @@ public abstract class Ship extends Sprite {
             reloadTimer = 0f;
             shoot();
         }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 }

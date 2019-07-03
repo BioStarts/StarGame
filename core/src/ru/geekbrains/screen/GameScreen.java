@@ -15,6 +15,7 @@ import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
+import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Enemy;
 import ru.geekbrains.sprite.Spaceship;
@@ -32,6 +33,7 @@ public class GameScreen extends BaseScreen {
 
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
+    private ExplosionPool explosionPool;
 
     private EnemyGenerator enemyGenerator;
 
@@ -64,10 +66,11 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         bulletPool = new BulletPool();
-        enemyPool = new EnemyPool(bulletPool, soundBullet, worldBounds);
+        explosionPool = new ExplosionPool(mainAtlas);
+        enemyPool = new EnemyPool(bulletPool, explosionPool, soundBullet, worldBounds);
         enemyGenerator = new EnemyGenerator(mainAtlas, enemyPool, worldBounds);
 
-        spaceship = new Spaceship(mainAtlas, bulletPool, soundLaser);
+        spaceship = new Spaceship(mainAtlas, bulletPool, explosionPool,  soundLaser);
 
         stars = new Star[COUNT_STARS];//
 
@@ -83,10 +86,8 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);//в методе происходит все изменения/логика объектов для последующей отрисовки
-
         checkCollisions();
-
-        freeAllDestroyedSprites();
+        freeAllDestroyedActiveSprites();
         draw();// отрисовка
     }
 
@@ -116,12 +117,14 @@ public class GameScreen extends BaseScreen {
         spaceship.update(delta);
         bulletPool.updateActiveSprites(delta);
         enemyPool.updateActiveSprites(delta);
+        explosionPool.updateActiveSprites(delta);
         enemyGenerator.generate(delta);
     }
 
-    private void freeAllDestroyedSprites(){
+    private void freeAllDestroyedActiveSprites(){
         bulletPool.freeAllDestroyedActiveSprites();
         enemyPool.freeAllDestroyedActiveSprites();
+        explosionPool.freeAllDestroyedActiveSprites();
     }
 
     private void draw(){
@@ -133,6 +136,7 @@ public class GameScreen extends BaseScreen {
         spaceship.draw(batch);
         bulletPool.drawActiveSprites(batch);
         enemyPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -152,6 +156,7 @@ public class GameScreen extends BaseScreen {
         atlas.dispose();
         bulletPool.dispose();
         enemyPool.dispose();
+        explosionPool.dispose();
         music.dispose();
         soundLaser.dispose();
         soundBullet.dispose();
