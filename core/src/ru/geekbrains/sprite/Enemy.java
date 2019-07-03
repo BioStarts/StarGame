@@ -9,6 +9,8 @@ import ru.geekbrains.pool.BulletPool;
 
 public class Enemy extends Ship {
 
+    private Vector2 descentV = new Vector2(0,-0.15f); //начальная скорость появления для большого корабля
+
     public Enemy(BulletPool bulletPool, Sound shootSound, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.shootSound = shootSound;
@@ -21,13 +23,16 @@ public class Enemy extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) >= worldBounds.getTop())){ // увеличиваем скорость большого корабля для адекватного появления на поле
+        /*if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) >= worldBounds.getTop())){ // увеличиваем скорость большого корабля для адекватного появления на поле
             this.v.set(0, -0.03f);
         } else if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) < worldBounds.getTop())) {
             this.v.set(0, -0.005f);
-        }
+        }*/
         if (getBottom() < worldBounds.getBottom()) {
             destroy();
+        }
+        if (getTop() < worldBounds.getTop()){
+            v.set(v0);
         }
     }
 
@@ -51,6 +56,6 @@ public class Enemy extends Ship {
         this.reloadInterval = reloadInterval;
         this.hp = hp;
         setHeightProportion(height);
-        v.set(v0);
+        v.set(descentV);
     }
 }

@@ -9,11 +9,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.List;
+
 import ru.geekbrains.base.BaseScreen;
 import ru.geekbrains.math.Rect;
 import ru.geekbrains.pool.BulletPool;
 import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.sprite.Background;
+import ru.geekbrains.sprite.Enemy;
 import ru.geekbrains.sprite.Spaceship;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemyGenerator;
@@ -80,18 +83,33 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);//в методе происходит все изменения/логика объектов для последующей отрисовки
-        freeAllDestroyedSprites();
 
-        for (int i = 0; i < enemyPool.getActiveObjects().size(); i++) {
+        checkCollisions();
+
+        freeAllDestroyedSprites();
+        draw();// отрисовка
+    }
+
+    private void checkCollisions() {
+        List<Enemy> enemyList = enemyPool.getActiveObjects();
+        for (Enemy enemy : enemyList) {
+            if (enemy.isDestroyed()){
+                continue;
+            }
+            float minDist = enemy.getHalfWidth() + spaceship.getHalfWidth();
+            if (spaceship.pos.dst(enemy.pos) < minDist){
+                enemy.destroy();
+            }
+        }
+        /*for (int i = 0; i < enemyList.size(); i++) {
             if (!enemyPool.getActiveObjects().get(i).isOutside(spaceship)){
                 enemyPool.getActiveObjects().get(i).destroy();
                 soundExplosion.play();
             }
-        }
-        draw();// отрисовка
+        }*/
     }
 
-    public void update(float delta){
+    private void update(float delta){
         for (int i = 0; i < stars.length; i++) {
             stars[i].update(delta);
         }
@@ -101,12 +119,12 @@ public class GameScreen extends BaseScreen {
         enemyGenerator.generate(delta);
     }
 
-    public void freeAllDestroyedSprites(){
+    private void freeAllDestroyedSprites(){
         bulletPool.freeAllDestroyedActiveSprites();
         enemyPool.freeAllDestroyedActiveSprites();
     }
 
-    public void draw(){
+    private void draw(){
         batch.begin();
         background.draw(batch);
         for (int i = 0; i < stars.length; i++) {
