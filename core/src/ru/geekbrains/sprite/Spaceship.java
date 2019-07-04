@@ -31,7 +31,7 @@ public class Spaceship extends Ship {
         this.damage = 1;
         this.shootSound = shootSound;
         this.reloadInterval = 0.25f;
-        this.hp = 100;
+        this.hp = 1;
         setHeightProportion(0.2f);
     }
 
