@@ -157,6 +157,13 @@ public class Spaceship extends Ship {
         v.setZero();
     }
 
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() >  pos.y
+                || bullet.getTop() < getBottom());
+    }
+
 
 
 }

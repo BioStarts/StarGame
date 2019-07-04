@@ -28,6 +28,9 @@ public abstract class Ship extends Sprite {
     protected float reloadInterval;
     protected float reloadTimer;
 
+    private float damageAnimateInterval = 0.1f;
+    private float damageAnimateTimer = damageAnimateInterval;
+
 
     public Ship(TextureRegion region, int rows, int cols, int frames) {
         super(region, rows, cols, frames);
@@ -55,11 +58,25 @@ public abstract class Ship extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v,delta);
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= damageAnimateInterval) {
+            frame = 0;
+        }
     }
 
     @Override
     public void destroy() {
         super.destroy();
         boom();
+    }
+
+    public void damage(int damage){
+        damageAnimateTimer = 0f;
+        frame = 1;
+        hp -= damage;
+        if (hp <= 0){
+            hp = 0;
+            destroy();
+        }
     }
 }
