@@ -127,11 +127,16 @@ public class Spaceship extends Ship {
 
     @Override
     public void update(float delta) {
+        reloadTimer += delta;
+        if (reloadTimer >= reloadInterval) {
+            reloadTimer = 0f;
+            shoot();
+        }
         checkWindowBorders(delta);
         super.update(delta);
     }
 
-    public void checkWindowBorders (float delta){
+    private void checkWindowBorders (float delta){
         if (worldBounds.getRight() < getRight()){//проверка чтобы ограничить перемещение по правой части экрана
             setRight(worldBounds.getRight());
             stop();

@@ -66,7 +66,7 @@ public class GameScreen extends BaseScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         bulletPool = new BulletPool();
-        explosionPool = new ExplosionPool(mainAtlas);
+        explosionPool = new ExplosionPool(mainAtlas, soundExplosion);
         enemyPool = new EnemyPool(bulletPool, explosionPool, soundBullet, worldBounds);
         enemyGenerator = new EnemyGenerator(mainAtlas, enemyPool, worldBounds);
 
@@ -160,6 +160,7 @@ public class GameScreen extends BaseScreen {
         music.dispose();
         soundLaser.dispose();
         soundBullet.dispose();
+        soundExplosion.dispose();
         super.dispose();
     }
 

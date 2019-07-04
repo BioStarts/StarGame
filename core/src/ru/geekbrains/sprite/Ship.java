@@ -26,7 +26,7 @@ public abstract class Ship extends Sprite {
     protected TextureRegion bulletRegion;
 
     protected float reloadInterval;
-    private float reloadTimer;
+    protected float reloadTimer;
 
 
     public Ship(TextureRegion region, int rows, int cols, int frames) {
@@ -55,11 +55,6 @@ public abstract class Ship extends Sprite {
     @Override
     public void update(float delta) {
         pos.mulAdd(v,delta);
-        reloadTimer += delta;
-        if (reloadTimer >= reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }
     }
 
     @Override

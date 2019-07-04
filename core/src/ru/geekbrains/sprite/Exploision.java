@@ -1,5 +1,6 @@
 package ru.geekbrains.sprite;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -7,15 +8,19 @@ import ru.geekbrains.base.Sprite;
 
 public class Exploision extends Sprite {
 
-    private float animateInterval = 0.017f;
+    private float animateInterval = 0.02f;
     private float animateTimer;
 
+    private Sound sound;
 
-    public Exploision(TextureRegion region, int rows, int cols, int frames) {
+
+    public Exploision(TextureRegion region, int rows, int cols, int frames, Sound sound) {
         super(region, rows, cols, frames);
+        this.sound = sound;
     }
 
     public void set (float height, Vector2 pos) {
+        sound.play();
         setHeightProportion( height);
         this.pos.set(pos);
     }

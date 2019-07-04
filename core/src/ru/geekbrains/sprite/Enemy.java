@@ -10,6 +10,10 @@ import ru.geekbrains.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
+    private enum  State { DESCENT, FIGHT }
+
+    private State state;
+
     private Vector2 descentV = new Vector2(0,-0.15f); //начальная скорость появления для большого корабля
 
     public Enemy(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds) {
@@ -30,11 +34,24 @@ public class Enemy extends Ship {
         } else if ((this.getHeight() == 0.2f) && ((this.pos.y + this.getHalfHeight()) < worldBounds.getTop())) {
             this.v.set(0, -0.005f);
         }*/
-        if (getBottom() < worldBounds.getBottom()) {
-            destroy();
-        }
-        if (getTop() < worldBounds.getTop()){
-            v.set(v0);
+
+        switch (state){
+            case DESCENT:
+                if (getTop() < worldBounds.getTop()) {
+                v.set(v0);
+                    state = State.FIGHT;
+            }
+                break;
+            case FIGHT:
+                if (getBottom() < worldBounds.getBottom()) {
+                    destroy();
+                }
+                reloadTimer += delta;
+                if (reloadTimer >= reloadInterval) {
+                    reloadTimer = 0f;
+                    shoot();
+                }
+                break;
         }
     }
 
@@ -59,5 +76,7 @@ public class Enemy extends Ship {
         this.hp = hp;
         setHeightProportion(height);
         v.set(descentV);
+        reloadTimer = reloadInterval;
+        state = State.DESCENT;
     }
 }
