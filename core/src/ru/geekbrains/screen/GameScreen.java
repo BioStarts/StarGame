@@ -19,6 +19,7 @@ import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Bullet;
 import ru.geekbrains.sprite.Enemy;
+import ru.geekbrains.sprite.GameOver;
 import ru.geekbrains.sprite.Spaceship;
 import ru.geekbrains.sprite.Star;
 import ru.geekbrains.utils.EnemyGenerator;
@@ -29,6 +30,8 @@ public class GameScreen extends BaseScreen {
     private Texture space;
     private TextureAtlas atlas;
     private TextureAtlas mainAtlas;
+
+    private GameOver gameOver;
 
     private final static int COUNT_STARS = 100;
 
@@ -66,6 +69,9 @@ public class GameScreen extends BaseScreen {
         background = new Background(new TextureRegion(space));
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
+
+        gameOver = new GameOver(mainAtlas);
+
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(mainAtlas, soundExplosion);
         enemyPool = new EnemyPool(bulletPool, explosionPool, soundBullet, worldBounds);
@@ -141,6 +147,8 @@ public class GameScreen extends BaseScreen {
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
             enemyGenerator.generate(delta);
+        } else {
+            gameOver.update(delta);
         }
     }
 
@@ -160,6 +168,8 @@ public class GameScreen extends BaseScreen {
             spaceship.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyPool.drawActiveSprites(batch);
+        } else {
+            gameOver.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
@@ -173,12 +183,14 @@ public class GameScreen extends BaseScreen {
             stars[i].resize(worldBounds);
         }
         spaceship.resize(worldBounds);
+        gameOver.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         space.dispose();
         atlas.dispose();
+        mainAtlas.dispose();
         bulletPool.dispose();
         enemyPool.dispose();
         explosionPool.dispose();
