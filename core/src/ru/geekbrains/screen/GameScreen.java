@@ -18,6 +18,7 @@ import ru.geekbrains.pool.EnemyPool;
 import ru.geekbrains.pool.ExplosionPool;
 import ru.geekbrains.sprite.Background;
 import ru.geekbrains.sprite.Bullet;
+import ru.geekbrains.sprite.ButtonNewGame;
 import ru.geekbrains.sprite.Enemy;
 import ru.geekbrains.sprite.GameOver;
 import ru.geekbrains.sprite.Spaceship;
@@ -32,6 +33,7 @@ public class GameScreen extends BaseScreen {
     private TextureAtlas mainAtlas;
 
     private GameOver gameOver;
+    private ButtonNewGame buttonNewGame;
 
     private final static int COUNT_STARS = 100;
 
@@ -71,6 +73,7 @@ public class GameScreen extends BaseScreen {
         mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
 
         gameOver = new GameOver(mainAtlas);
+        buttonNewGame = new ButtonNewGame(mainAtlas,this);
 
         bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(mainAtlas, soundExplosion);
@@ -170,6 +173,7 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         } else {
             gameOver.draw(batch);
+            buttonNewGame.draw(batch);
         }
         explosionPool.drawActiveSprites(batch);
         batch.end();
@@ -221,6 +225,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer) {
         if (!spaceship.isDestroyed()) {
             spaceship.touchDown(touch, pointer);
+        } else {
+            buttonNewGame.touchDown(touch, pointer);
         }
         return false;
     }
@@ -229,7 +235,17 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer) {
         if (!spaceship.isDestroyed()) {
             spaceship.touchUp(touch, pointer);
+        } else {
+            buttonNewGame.touchUp(touch, pointer);
         }
         return false;
+    }
+
+    public void startNewGame() {
+        spaceship.setToNewGame(worldBounds);
+
+        bulletPool.freeAllActiveSprites();
+        enemyPool.freeAllActiveSprites();
+        explosionPool.freeAllActiveSprites();
     }
 }

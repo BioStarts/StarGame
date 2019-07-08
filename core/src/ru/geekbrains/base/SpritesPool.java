@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.geekbrains.math.Rect;
-
 public abstract class SpritesPool<T extends Sprite> {
 
     protected final List<T> activeObjects = new ArrayList<T>();
@@ -64,6 +62,11 @@ public abstract class SpritesPool<T extends Sprite> {
                 sprite.flushDestroy();
             }
         }
+    }
+
+    public void freeAllActiveSprites(){
+        freeObjects.addAll(activeObjects);
+        activeObjects.clear();
     }
 
     public void free(T object){

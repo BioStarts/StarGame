@@ -12,6 +12,7 @@ import ru.geekbrains.pool.ExplosionPool;
 public class Spaceship extends Ship {
 
     private static final  int INVALID_POINTER = -1;
+    private static final  int HP = 1;
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -31,10 +32,15 @@ public class Spaceship extends Ship {
         this.damage = 1;
         this.shootSound = shootSound;
         this.reloadInterval = 0.25f;
-        this.hp = 1;
+        this.hp = HP;
         setHeightProportion(0.2f);
     }
 
+    public void setToNewGame(Rect worldBounds){
+        flushDestroy();
+        hp = HP;
+        this.pos.x = worldBounds.pos.x;
+    }
 
     public boolean keyDown(int keycode) {
         switch (keycode){
@@ -164,6 +170,13 @@ public class Spaceship extends Ship {
                 || bullet.getTop() < getBottom());
     }
 
-
-
+    @Override
+    public void destroy() {
+        super.destroy();
+        stop();
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+    }
 }
