@@ -27,6 +27,10 @@ import ru.geekbrains.utils.EnemyGenerator;
 
 public class GameScreen extends BaseScreen {
 
+    private enum State {PLAYING, PAUSE, GAME_OVER};
+    private State state;
+    private State oldState;
+
     private Background background;
     private Texture space;
     private TextureAtlas atlas;
@@ -67,6 +71,8 @@ public class GameScreen extends BaseScreen {
         music.setLooping(true);
         music.play();
 
+        state = State.PLAYING;
+
         space = new Texture("textures/space.jpg");
         background = new Background(new TextureRegion(space));
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
@@ -102,7 +108,7 @@ public class GameScreen extends BaseScreen {
     }
 
     private void checkCollisions() {
-        if (spaceship.isDestroyed()){
+        if (state != State.PLAYING){
             return;
         }
         List<Enemy> enemyList = enemyPool.getActiveObjects();
@@ -114,6 +120,7 @@ public class GameScreen extends BaseScreen {
             if (spaceship.pos.dst(enemy.pos) < minDist){
                 enemy.destroy();
                 spaceship.destroy();
+                state = State.GAME_OVER;
             }
         }
          List<Bullet> bulletList = bulletPool.getActiveObjects();
@@ -134,6 +141,9 @@ public class GameScreen extends BaseScreen {
             } else { // начинается проверка коллизий уже для нашего корабля и вражеских пуль
                 if (spaceship.isBulletCollision(bullet)){
                     spaceship.damage(bullet.getDamage());
+                    if (spaceship.isDestroyed()){
+                        state = State.GAME_OVER;
+                    }
                     bullet.destroy();
                 }
             }
@@ -145,7 +155,7 @@ public class GameScreen extends BaseScreen {
             stars[i].update(delta);
         }
         explosionPool.updateActiveSprites(delta);
-        if (!spaceship.isDestroyed()){
+        if (state == State.PLAYING){
             spaceship.update(delta);
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
@@ -167,11 +177,11 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
-        if (!spaceship.isDestroyed()){
+        if (state == State.PLAYING){
             spaceship.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyPool.drawActiveSprites(batch);
-        } else {
+        } else if (state == State.GAME_OVER){
             gameOver.draw(batch);
             buttonNewGame.draw(batch);
         }
@@ -207,7 +217,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (!spaceship.isDestroyed()){
+        if (state == State.PLAYING){
             spaceship.keyDown(keycode);
         }
         return false;
@@ -215,7 +225,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (!spaceship.isDestroyed()) {
+        if (state == State.PLAYING) {
             spaceship.keyUp(keycode);
         }
         return false;
@@ -223,9 +233,9 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        if (!spaceship.isDestroyed()) {
+        if (state == State.PLAYING) {
             spaceship.touchDown(touch, pointer);
-        } else {
+        } else if (state == State.GAME_OVER){
             buttonNewGame.touchDown(touch, pointer);
         }
         return false;
@@ -233,16 +243,33 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        if (!spaceship.isDestroyed()) {
+        if (state == State.PLAYING) {
             spaceship.touchUp(touch, pointer);
-        } else {
+        } else if (state == State.GAME_OVER) {
             buttonNewGame.touchUp(touch, pointer);
         }
         return false;
     }
 
+    @Override
+    public void pause() {
+        super.pause();
+        oldState = state;
+        state = State.PAUSE;
+        music.pause();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+        state = oldState;
+        music.play();
+    }
+
     public void startNewGame() {
         spaceship.setToNewGame(worldBounds);
+
+        state = State.PLAYING;
 
         bulletPool.freeAllActiveSprites();
         enemyPool.freeAllActiveSprites();
