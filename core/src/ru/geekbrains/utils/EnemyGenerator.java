@@ -15,21 +15,21 @@ import ru.geekbrains.sprite.Enemy;
 public class EnemyGenerator {
 
     private static final float ENEMY_SMALL_HEIGHT = 0.1f;
-    private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.01f;
+    private static final float ENEMY_SMALL_BULLET_HEIGHT = 0.015f;
     private static final float ENEMY_SMALL_BULLET_VY = -0.3f;
     private static final int ENEMY_SMALL_DAMAGE = 1;
     private static final float ENEMY_SMALL_RELOAD_INTERVAL = 3f;
     private static int ENEMY_SMALL_HP = 1;
 
     private static final float ENEMY_MIDDLE_HEIGHT = 0.1f;
-    private static final float ENEMY_MIDDLE_BULLET_HEIGHT = 0.02f;
+    private static final float ENEMY_MIDDLE_BULLET_HEIGHT = 0.022f;
     private static final float ENEMY_MIDDLE_BULLET_VY = -0.25f;
     private static final int ENEMY_MIDDLE_DAMAGE = 5;
     private static final float ENEMY_MIDDLE_RELOAD_INTERVAL = 4f;
     private static int ENEMY_MIDDLE_HP = 5;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
-    private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
+    private static final float ENEMY_BIG_BULLET_HEIGHT = 0.033f;
     private static final float ENEMY_BIG_BULLET_VY = -0.3f;
     private static final int ENEMY_BIG_DAMAGE = 10;
     private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
