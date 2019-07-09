@@ -24,6 +24,7 @@ import ru.geekbrains.sprite.Enemy;
 import ru.geekbrains.sprite.GameOver;
 import ru.geekbrains.sprite.Spaceship;
 import ru.geekbrains.sprite.Star;
+import ru.geekbrains.sprite.TrackingStar;
 import ru.geekbrains.utils.EnemyGenerator;
 import ru.geekbrains.utils.Font;
 
@@ -61,7 +62,7 @@ public class GameScreen extends BaseScreen {
 
     private Spaceship spaceship;
 
-    private Star[] stars;
+    private TrackingStar[] stars;
 
     private Music music;
     private Sound soundLaser;//
@@ -107,10 +108,10 @@ public class GameScreen extends BaseScreen {
 
         spaceship = new Spaceship(mainAtlas, bulletPool, explosionPool,  soundLaser);
 
-        stars = new Star[COUNT_STARS];//
+        stars = new TrackingStar[COUNT_STARS];//
 
         for (int i = 0; i < stars.length ; i++) {
-            stars[i] = new Star(atlas);
+            stars[i] = new TrackingStar(atlas, spaceship.getV());
         }
 
     }

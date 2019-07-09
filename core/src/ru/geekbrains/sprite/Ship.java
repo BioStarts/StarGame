@@ -74,6 +74,10 @@ public abstract class Ship extends Sprite {
         return hp;
     }
 
+    public Vector2 getV() {
+        return v;
+    }
+
     public void damage(int damage){
         damageAnimateTimer = 0f;
         frame = 1;

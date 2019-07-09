@@ -180,5 +180,4 @@ public class Spaceship extends Ship {
                 || bullet.getTop() < getBottom());
     }
 
-
 }
