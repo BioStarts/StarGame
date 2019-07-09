@@ -142,6 +142,16 @@ public class Spaceship extends Ship {
         super.update(delta);
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        stop();
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+    }
+
     private void checkWindowBorders (float delta){
         if (worldBounds.getRight() < getRight()){//проверка чтобы ограничить перемещение по правой части экрана
             setRight(worldBounds.getRight());
@@ -152,13 +162,13 @@ public class Spaceship extends Ship {
             stop();
         }
     }
-
     private void moveRight(){
         v.set(v0);
     }
     private void moveLeft(){
         v.set(v0).rotate(180);
     }
+
     private void stop(){
         v.setZero();
     }
@@ -170,13 +180,5 @@ public class Spaceship extends Ship {
                 || bullet.getTop() < getBottom());
     }
 
-    @Override
-    public void destroy() {
-        super.destroy();
-        stop();
-        pressedLeft = false;
-        pressedRight = false;
-        leftPointer = INVALID_POINTER;
-        rightPointer = INVALID_POINTER;
-    }
+
 }

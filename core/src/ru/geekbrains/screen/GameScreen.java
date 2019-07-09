@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
@@ -88,6 +89,8 @@ public class GameScreen extends BaseScreen {
 
         state = State.PLAYING;
         sbFrags = new StringBuilder();
+        sbHp = new StringBuilder();
+        sbLevel = new StringBuilder();
 
         space = new Texture("textures/space.jpg");
         background = new Background(new TextureRegion(space));
@@ -135,7 +138,7 @@ public class GameScreen extends BaseScreen {
             float minDist = enemy.getHalfWidth() + spaceship.getHalfWidth();
             if (spaceship.pos.dst(enemy.pos) < minDist){
                 enemy.destroy();
-                spaceship.destroy();
+                spaceship.damage(spaceship.getHp());
                 state = State.GAME_OVER;
             }
         }
@@ -178,7 +181,7 @@ public class GameScreen extends BaseScreen {
             spaceship.update(delta);
             bulletPool.updateActiveSprites(delta);
             enemyPool.updateActiveSprites(delta);
-            enemyGenerator.generate(delta);
+            enemyGenerator.generate(delta, frags);
         } else {
             gameOver.update(delta);
         }
@@ -211,7 +214,11 @@ public class GameScreen extends BaseScreen {
 
     private void printInfo() {
         sbFrags.setLength(0);
+        sbHp.setLength(0);
+        sbLevel.setLength(0);
         font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getTop());
+        font.draw(batch, sbHp.append(HP).append(spaceship.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        font.draw(batch, sbLevel.append(Level).append(enemyGenerator.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
     }
 
     @Override
@@ -297,6 +304,8 @@ public class GameScreen extends BaseScreen {
 
         state = State.PLAYING;
         frags = 0;
+        enemyGenerator.setLevel(1);
+
 
         bulletPool.freeAllActiveSprites();
         enemyPool.freeAllActiveSprites();
